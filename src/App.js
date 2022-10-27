@@ -1,24 +1,30 @@
-import { useState, useEffect } from "react";
-
-function Hello() {
-  const byFn = () => {
-    console.log("bye :(");
-  };
-  const effectFn = () => {
-    console.log("created :)");
-    return byFn; // cleanup function
-  };
-  useEffect(effectFn, []);
-  return <h1>Hello</h1>;
-}
+import { useState } from "react";
 
 function App() {
-  const [showing, setShowing] = useState(false);
-  const onclick = () => setShowing((prev) => !prev);
+  const [toDo, setToDo] = useState("");
+  const [toDos, setTodos] = useState([]);
+  const onChange = (e) => setToDo(e.target.value);
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (toDo === "") return;
+
+    setTodos((currentArray) => [...currentArray, toDo]);
+    setToDo("");
+  };
+
   return (
     <div>
-      {showing ? <Hello /> : null}
-      <button onClick={onclick}>{showing ? "Hide" : "Show"}</button>
+      <h1>My To Dos ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input
+          value={toDo}
+          type="text"
+          placeholder="Write your to do..."
+          onChange={onChange}
+        />
+        <button>Add To Do</button>
+      </form>
     </div>
   );
 }
